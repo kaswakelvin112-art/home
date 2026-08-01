@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>URL Shortener — Kaswa Kelvin</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="url.css">
+</head>
+<body>
+<div class="wrap">
+  <a href="../index.html" class="back-link mono">← back to portfolio</a>
+  <header>
+    <span class="eyebrow">// project playground</span>
+    <h1>URL Shortener</h1>
+    <p>Paste a long link, get a short one back. Click it to jump straight to the original.</p>
+  </header>
+
+  <p class="note">This runs entirely in your browser as a demo of the flow — links only resolve in this tab, and reset on refresh. A real version would swap this in-memory list for a Laravel API + database, so short links work for anyone, from any device.</p>
+
+  <div class="panel">
+    <h2>Shorten a link</h2>
+    <form id="shortenForm">
+      <div class="field">
+        <label for="longUrl">Long URL</label>
+        <input type="url" id="longUrl" placeholder="https://example.com/some/very/long/path" required>
+      </div>
+      <button type="submit">Shorten</button>
+    </form>
+    <p class="error" id="formError">Enter a valid URL starting with http:// or https://.</p>
+  </div>
+
+  <div class="panel">
+    <h2>Your links</h2>
+    <ul class="link-list" id="linkList"></ul>
+  </div>
+</div>
+
+<script>
+  const SHORT_DOMAIN = 'kwl.ink';
+  const CODE_CHARS = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+
+  let links = [];
+  const usedCodes = new Set();
+
+  function makeCode(len = 6) {
+    let code;
+    do {
+      code = '';
+      for (let i = 0; i < len; i++) code += CODE_CHARS[Math.floor(Math.random() * CODE_CHARS.length)];
+    } while (usedCodes.has(code));
+    usedCodes.add(code);
+    return code;
+  }
+
+  const form = document.getElementById('shortenForm');
+  const errorEl = document.getElementById('formError');
+
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const input = document.getElementById('longUrl');
+    const raw = input.value.trim();
+
+    let valid = false;
+    try {
+      const parsed = new URL(raw);
+      valid = parsed.protocol === 'http:' || parsed.protocol === 'https:';
+    } catch (err) {
+      valid = false;
+    }
+
+    if (!valid) {
+      errorEl.style.display = 'block';
+      return;
+    }
+    errorEl.style.display = 'none';
+
+    const code = makeCode();
+    links.unshift({ code, longUrl: raw, clicks: 0, createdAt: new Date() });
+    form.reset();
+    render();
+  });
+
+  function visit(code) {
+    const link = links.find(l => l.code === code);
+    if (!link) return;
+    link.clicks += 1;
+    render();
+    window.open(link.longUrl, '_blank', 'noopener');
+  }
+
+  function copyShort(code) {
+    const shortUrl = `https://${SHORT_DOMAIN}/${code}`;
+    navigator.clipboard.writeText(shortUrl).catch(() => {});
+  }
+
+  function removeLink(code) {
+    links = links.filter(l => l.code !== code);
+    render();
+  }
+
+  function render() {
+    const listEl = document.getElementById('linkList');
+    if (!links.length) {
+      listEl.innerHTML = '<li class="empty-state">No shortened links yet — add one above.</li>';
+      return;
+    }
+    listEl.innerHTML = links.map(l => `
+      <li class="link-row">
+        <div class="link-original">${l.longUrl}</div>
+        <div class="link-short-row">
+          <span class="link-short">${SHORT_DOMAIN}/${l.code}</span>
+          <div class="link-actions">
+            <button class="icon-btn" onclick="visit('${l.code}')">Visit</button>
+            <button class="icon-btn" onclick="copyShort('${l.code}')">Copy</button>
+            <button class="icon-btn danger" onclick="removeLink('${l.code}')">Delete</button>
+          </div>
+          <span class="link-meta">${l.clicks} click${l.clicks === 1 ? '' : 's'}</span>
+        </div>
+      </li>
+    `).join('');
+  }
+
+  render();
+</script>
+</body>
+</html>
