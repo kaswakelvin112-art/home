@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kaswa Kelvin — Full-Stack Developer</title>
+<meta name="description" content="Kaswa Kelvin Paul Muyinza — full-stack developer building web and desktop apps out of Kampala, Uganda.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="home.css">
+</head>
+<body>
+
+<div class="blob blob-1"></div>
+<div class="blob blob-2"></div>
+<div class="blob blob-3"></div>
+
+<nav>
+  <div class="nav-inner">
+    <a href="#top" class="logo"><span class="logo-dot"></span>Kelvin</a>
+    <div class="nav-links" id="navLinks">
+      <a href="#about">About</a>
+      <a href="#skills">Skills</a>
+      <a href="#work">Work</a>
+      <a href="#projects">Projects</a>
+      <a href="#contact">Contact</a>
+    </div>
+    <button class="nav-toggle" id="navToggle" aria-label="Toggle menu">☰</button>
+  </div>
+</nav>
+
+<div class="wrap">
+
+  <section class="hero" id="top">
+    <div>
+      <span class="eyebrow">available for freelance work</span>
+      <h1>Building things that <span class="accent">work</span> — <br>on the web and off it.</h1>
+      <p class="lede">I'm Kaswa Kelvin Paul Muyinza, a full-stack developer based in Bunamwaya, Kampala, currently studying Software Engineering at Makerere University. I build real-time web apps and desktop software, from database to UI.</p>
+      <div class="hero-cta">
+        <a href="#contact" class="btn btn-primary">Let's work together</a>
+        <a href="#projects" class="btn btn-ghost">See what I build →</a>
+      </div>
+    </div>
+    <div class="orbit-wrap">
+      <div class="orbit-ring ring-1"></div>
+      <div class="orbit-ring ring-2"></div>
+      <div class="avatar-core">KK</div>
+      <div class="orbit-chip chip-1">Laravel</div>
+      <div class="orbit-chip chip-2">React</div>
+      <div class="orbit-chip chip-3">JavaFX</div>
+      <div class="orbit-chip chip-4">WebSockets</div>
+    </div>
+  </section>
+
+  <section id="about">
+    <div class="section-head">
+      <span class="section-tag">// about</span>
+      <h2>The short version</h2>
+    </div>
+    <div class="about-grid">
+      <div>
+        <p>I like building software that reacts <strong>live</strong> — quizzes that count down in real time, forums that push replies the instant they're posted, dashboards that sync across devices. Most of my recent work has been on a Laravel-based educational platform and a JavaFX desktop app with offline-first sync.</p>
+        <p>Outside of client-style work, I'm always shipping a side project — right now that's <strong>Atomic Life</strong>, a React app that turns "things I want to add to my life" into an actual daily schedule.</p>
+        <p>I'm now opening up to freelance and contract web work — if you need a site or web app built properly, from the database up, let's talk.</p>
+      </div>
+      <div class="facts">
+        <div class="fact"><span class="fact-label">NAME</span><span class="fact-value">Kaswa Kelvin Paul Muyinza</span></div>
+        <div class="fact"><span class="fact-label">SCHOOL</span><span class="fact-value">Makerere University</span></div>
+        <div class="fact"><span class="fact-label">COURSE</span><span class="fact-value">BSSE</span></div>
+        <div class="fact"><span class="fact-label">BASED IN</span><span class="fact-value">Bunamwaya, Kampala</span></div>
+        <div class="fact"><span class="fact-label">FOCUS</span><span class="fact-value">Full-stack web + desktop</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="skills">
+    <div class="section-head">
+      <span class="section-tag">// skills</span>
+      <h2>What I build with</h2>
+    </div>
+    <div class="skills-grid">
+      <div class="skill"><div class="skill-name">HTML / CSS / JS</div><div class="skill-tag">core web</div></div>
+      <div class="skill"><div class="skill-name">React</div><div class="skill-tag">front-end</div></div>
+      <div class="skill"><div class="skill-name">Laravel</div><div class="skill-tag">back-end</div></div>
+      <div class="skill"><div class="skill-name">Blade</div><div class="skill-tag">templating</div></div>
+      <div class="skill"><div class="skill-name">Eloquent ORM</div><div class="skill-tag">database</div></div>
+      <div class="skill"><div class="skill-name">WebSockets</div><div class="skill-tag">real-time</div></div>
+      <div class="skill"><div class="skill-name">JavaFX</div><div class="skill-tag">desktop</div></div>
+      <div class="skill"><div class="skill-name">SQLite sync</div><div class="skill-tag">offline-first</div></div>
+    </div>
+  </section>
+
+  <section id="work">
+    <div class="section-head">
+      <span class="section-tag">// currently building</span>
+      <h2>Featured work</h2>
+    </div>
+    <div class="work-grid">
+      <div class="work-card">
+        <span class="pill pill-active">In progress</span>
+        <h3>Live quiz &amp; forum platform</h3>
+        <p>A Laravel educational platform with a live quiz module (real-time countdowns, group-scoped broadcasts) and a discussion forum with instant AJAX replies over WebSockets.</p>
+      </div>
+      <div class="work-card">
+        <span class="pill pill-active">In progress</span>
+        <h3>Smart Forum (desktop)</h3>
+        <p>A JavaFX desktop forum app built offline-first — local SQLite storage, a sync service layer, and live updates over WebSockets once you're back online.</p>
+      </div>
+      <div class="work-card">
+        <span class="pill pill-active">In progress</span>
+        <h3>Atomic Life</h3>
+        <p>A React app (web + mobile) that turns "what I want to add to my life" into an auto-generated daily schedule, with calendar sync and a document vault.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="projects">
+    <div class="section-head">
+      <span class="section-tag">// the playground</span>
+      <h2>Projects to build next</h2>
+    </div>
+    <div class="filter-row">
+      <button class="filter-btn active" data-filter="all">All</button>
+      <button class="filter-btn" data-filter="live">Live</button>
+      <button class="filter-btn" data-filter="build">Building</button>
+      <button class="filter-btn" data-filter="idea">Ideas</button>
+    </div>
+    <div class="project-grid" id="projectGrid">
+
+      <div class="project-card" data-status="build">
+        <div class="project-top"><h3>Task &amp; habit tracker</h3><span class="pill pill-build">Building</span></div>
+        <p>A lighter, standalone cousin of Atomic Life — add a goal, get a schedule.</p>
+        <span class="project-stack">React</span>
+        <a href="#" class="project-link">View details →</a>
+      </div>
+
+      <div class="project-card" data-status="idea">
+        <div class="project-top"><h3>Real-time chat</h3><span class="pill pill-idea">Idea</span></div>
+        <p>Extracted from the forum's broadcasting setup — the hard part's done, this is mostly UI.</p>
+        <span class="project-stack">Laravel · WebSockets</span>
+        <a href="#" class="project-link">View details →</a>
+      </div>
+
+      <div class="project-card" data-status="idea">
+        <div class="project-top"><h3>Quiz Arena</h3><span class="pill pill-idea">Idea</span></div>
+        <p>A standalone version of the live quiz module, pulled out of the education platform.</p>
+        <span class="project-stack">Laravel · Blade</span>
+        <a href="#" class="project-link">View details →</a>
+      </div>
+
+      <div class="project-card" data-status="build">
+        <div class="project-top"><h3>Expense tracker</h3><span class="pill pill-build">Building</span></div>
+        <p>Log spending, see it charted by category. A clean, fast weekend build.</p>
+        <span class="project-stack">JS · Charts</span>
+        <a href="#" class="project-link">View details →</a>
+      </div>
+
+      <div class="project-card" data-status="idea">
+        <div class="project-top"><h3>Recipe &amp; meal planner</h3><span class="pill pill-idea">Idea</span></div>
+        <p>Search a public recipe API, save favorites, plan a week of meals.</p>
+        <span class="project-stack">React · public API</span>
+        <a href="#" class="project-link">View details →</a>
+      </div>
+
+      <div class="project-card" data-status="build">
+        <div class="project-top"><h3>Offline notes (web)</h3><span class="pill pill-build">Building</span></div>
+        <p>A browser notes app that works with no connection, then syncs — the offline-first idea from Smart Forum, brought to the web.</p>
+        <span class="project-stack">JS · IndexedDB</span>
+        <a href="#" class="project-link">View details →</a>
+      </div>
+
+      <div class="project-card" data-status="build">
+        <div class="project-top"><h3>URL shortener</h3><span class="pill pill-build">Building</span></div>
+        <p>A small API-first project — good proof of backend depth in one afternoon.</p>
+        <span class="project-stack">Laravel API</span>
+        <a href="#" class="project-link">View details →</a>
+      </div>
+
+      <div class="project-card" data-status="live">
+        <div class="project-top"><h3>Weather dashboard</h3><span class="pill pill-live">Live</span></div>
+        <p>Already built — a fast, visual weather lookup pulling from a public API.</p>
+        <span class="project-stack">JS · API</span>
+        <a href="#" class="project-link">View project →</a>
+      </div>
+
+      <div class="project-card" data-status="idea">
+        <div class="project-top"><h3>Mini storefront</h3><span class="pill pill-idea">Idea</span></div>
+        <p>A small shop front with cart and checkout flow — good client-work proof of concept.</p>
+        <span class="project-stack">Laravel</span>
+        <a href="#" class="project-link">View details →</a>
+      </div>
+
+    </div>
+  </section>
+
+  <section id="contact">
+    <div class="contact-card">
+      <h2>Got a website to build?</h2>
+      <p>I'm open to freelance and contract web work — reach out and let's talk about it.</p>
+      <div class="contact-links">
+        <a href="mailto:kaswakelvin112@gmail.com" class="btn btn-primary">Email me</a>
+        <a href="https://wa.me/256742611693" target="_blank" rel="noopener" class="btn btn-ghost">WhatsApp</a>
+        <a href="https://github.com/kaswakelvin112-art" target="_blank" rel="noopener" class="btn btn-ghost">GitHub</a>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<footer>
+  <div class="wrap">© <span id="year"></span> Kaswa Kelvin Paul Muyinza. Built with HTML, CSS &amp; a little JS.</div>
+</footer>
+
+<script>
+  document.getElementById('year').textContent = new Date().getFullYear();
+
+  const navToggle = document.getElementById('navToggle');
+  const navLinks = document.getElementById('navLinks');
+  navToggle.addEventListener('click', () => navLinks.classList.toggle('open'));
+  navLinks.querySelectorAll('a').forEach(a => a.addEventListener('click', () => navLinks.classList.remove('open')));
+
+  const filterBtns = document.querySelectorAll('.filter-btn');
+  const cards = document.querySelectorAll('.project-card');
+  filterBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      filterBtns.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const filter = btn.dataset.filter;
+      cards.forEach(card => {
+        card.style.display = (filter === 'all' || card.dataset.status === filter) ? 'flex' : 'none';
+      });
+    });
+  });
+
+  const revealTargets = document.querySelectorAll('.work-card, .project-card, .skill, .fact');
+  revealTargets.forEach(el => { el.style.opacity = '0'; el.style.transform = 'translateY(16px)'; el.style.transition = 'opacity 0.5s ease, transform 0.5s ease'; });
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.style.opacity = '1';
+        entry.target.style.transform = 'translateY(0)';
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.15 });
+  revealTargets.forEach(el => observer.observe(el));
+</script>
+
+</body>
+</html>
