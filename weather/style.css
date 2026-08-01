@@ -7,6 +7,19 @@
 body{
     background-color: #2f2f2f;
 }
+
+.back-link{
+    display:block;
+    margin-bottom: 20px;
+    font-size: 13px;
+    color: rgb(255, 255, 255);
+    text-decoration: none;
+    text-align: left;
+}
+.back-link:hover{
+    color: rgb(179, 6, 247);
+    text-decoration: underline;
+}
 .card{
     width:90%;
     max-width:470px;
