@@ -46,10 +46,10 @@
       <div class="orbit-ring ring-1"></div>
       <div class="orbit-ring ring-2"></div>
       <div class="avatar-core">KK</div>
-      <div class="orbit-chip chip-1">Laravel</div>
-      <div class="orbit-chip chip-2">React</div>
-      <div class="orbit-chip chip-3">JavaFX</div>
-      <div class="orbit-chip chip-4">WebSockets</div>
+      <div class="orbit-chip chip-1"><span class="chip-inner">Laravel</span></div>
+      <div class="orbit-chip chip-2"><span class="chip-inner">React</span></div>
+      <div class="orbit-chip chip-3"><span class="chip-inner">JavaFX</span></div>
+      <div class="orbit-chip chip-4"><span class="chip-inner">WebSockets</span></div>
     </div>
   </section>
 
@@ -149,11 +149,11 @@
         <a href="#" class="project-link">View details →</a>
       </div>
 
-      <div class="project-card" data-status="build">
-        <div class="project-top"><h3>Expense tracker</h3><span class="pill pill-build">Building</span></div>
+      <div class="project-card" data-status="live">
+        <div class="project-top"><h3>Expense tracker</h3><span class="pill pill-live">Live</span></div>
         <p>Log spending, see it charted by category. A clean, fast weekend build.</p>
         <span class="project-stack">JS · Charts</span>
-        <a href="#" class="project-link">View details →</a>
+        <a href="expense-tracker/index.html" class="project-link">Open app →</a>
       </div>
 
       <div class="project-card" data-status="idea">
@@ -230,6 +230,46 @@
       cards.forEach(card => {
         card.style.display = (filter === 'all' || card.dataset.status === filter) ? 'flex' : 'none';
       });
+    });
+  });
+
+  const chipInners = document.querySelectorAll('.chip-inner');
+  const FLEE_RADIUS = 90;
+  const MAX_PUSH = 46;
+  window.addEventListener('mousemove', (e) => {
+    chipInners.forEach(chip => {
+      const rect = chip.getBoundingClientRect();
+      const cx = rect.left + rect.width / 2;
+      const cy = rect.top + rect.height / 2;
+      const dx = cx - e.clientX;
+      const dy = cy - e.clientY;
+      const dist = Math.sqrt(dx * dx + dy * dy);
+      if (dist < FLEE_RADIUS && dist > 0) {
+        const strength = (1 - dist / FLEE_RADIUS) * MAX_PUSH;
+        const px = (dx / dist) * strength;
+        const py = (dy / dist) * strength;
+        chip.style.transform = `translate(${px}px, ${py}px)`;
+      } else {
+        chip.style.transform = 'translate(0px, 0px)';
+      }
+    });
+  });
+  window.addEventListener('touchmove', (e) => {
+    if (!e.touches || !e.touches[0]) return;
+    const touch = e.touches[0];
+    chipInners.forEach(chip => {
+      const rect = chip.getBoundingClientRect();
+      const cx = rect.left + rect.width / 2;
+      const cy = rect.top + rect.height / 2;
+      const dx = cx - touch.clientX;
+      const dy = cy - touch.clientY;
+      const dist = Math.sqrt(dx * dx + dy * dy);
+      if (dist < FLEE_RADIUS && dist > 0) {
+        const strength = (1 - dist / FLEE_RADIUS) * MAX_PUSH;
+        chip.style.transform = `translate(${(dx / dist) * strength}px, ${(dy / dist) * strength}px)`;
+      } else {
+        chip.style.transform = 'translate(0px, 0px)';
+      }
     });
   });
 

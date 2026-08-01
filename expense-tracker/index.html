@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Expense Tracker — Kaswa Kelvin</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#120F2A; --surface:#1E1949; --surface-2:#261E5C;
+    --text:#F4F1FF; --text-dim:#B3ACDB;
+    --coral:#FF5D73; --coral-dim:#4A1B22;
+    --gold:#FFC857; --gold-dim:#4A3711;
+    --mint:#5EEAD4; --mint-dim:#0F3D36;
+    --border:rgba(244,241,255,0.12); --radius:16px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;line-height:1.6;padding:40px 20px;}
+  h1,h2,.display{font-family:'Fredoka',sans-serif;font-weight:600;}
+  .mono{font-family:'JetBrains Mono',monospace;}
+  .wrap{max-width:920px;margin:0 auto;}
+  header{margin-bottom:32px;}
+  .eyebrow{font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--mint);margin-bottom:8px;display:block;}
+  header h1{font-size:clamp(28px,5vw,38px);}
+  header p{color:var(--text-dim);margin-top:8px;}
+  .back-link{display:inline-block;margin-bottom:20px;font-size:13px;color:var(--text-dim);}
+  .back-link:hover{color:var(--gold);}
+
+  .summary-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:32px;}
+  .summary-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:20px;}
+  .summary-label{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--text-dim);margin-bottom:8px;display:block;}
+  .summary-value{font-size:26px;font-weight:600;font-family:'Fredoka',sans-serif;}
+  .summary-value.coral{color:var(--coral);}
+  .summary-value.mint{color:var(--mint);}
+  .summary-value.gold{color:var(--gold);}
+
+  .panel{background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:28px;margin-bottom:24px;}
+  .panel h2{font-size:19px;margin-bottom:18px;}
+
+  form{display:grid;grid-template-columns:2fr 1fr 1fr auto;gap:12px;align-items:end;}
+  .field{display:flex;flex-direction:column;gap:6px;}
+  .field label{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text-dim);}
+  input, select{
+    background:var(--surface-2);border:1px solid var(--border);color:var(--text);
+    padding:12px 14px;border-radius:10px;font-family:'Inter',sans-serif;font-size:14px;
+  }
+  input:focus, select:focus{outline:none;border-color:var(--mint);}
+  button{
+    background:var(--coral);color:#2A0A0F;border:none;padding:12px 22px;border-radius:10px;
+    font-weight:600;font-size:14px;cursor:pointer;transition:transform 0.15s;
+  }
+  button:hover{transform:translateY(-2px);}
+  .error{color:var(--coral);font-size:13px;margin-top:10px;display:none;}
+
+  .tx-list{list-style:none;display:flex;flex-direction:column;gap:2px;}
+  .tx-row{
+    display:grid;grid-template-columns:auto 1fr auto auto;gap:14px;align-items:center;
+    padding:14px 4px;border-bottom:1px solid var(--border);
+  }
+  .tx-row:last-child{border-bottom:none;}
+  .tx-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0;}
+  .tx-desc{font-weight:500;font-size:14.5px;}
+  .tx-cat{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text-dim);}
+  .tx-amount{font-weight:600;font-size:15px;white-space:nowrap;}
+  .tx-del{background:none;border:none;color:var(--text-dim);font-size:18px;cursor:pointer;padding:4px 8px;}
+  .tx-del:hover{color:var(--coral);}
+  .empty-state{color:var(--text-dim);text-align:center;padding:30px 0;font-size:14px;}
+
+  .breakdown-row{display:grid;grid-template-columns:110px 1fr 70px;gap:12px;align-items:center;margin-bottom:14px;}
+  .breakdown-row:last-child{margin-bottom:0;}
+  .breakdown-label{font-size:13px;color:var(--text-dim);}
+  .breakdown-track{height:10px;background:var(--surface-2);border-radius:100px;overflow:hidden;}
+  .breakdown-fill{height:100%;border-radius:100px;transition:width 0.4s ease;}
+  .breakdown-pct{font-family:'JetBrains Mono',monospace;font-size:12px;text-align:right;color:var(--text-dim);}
+
+  @media(max-width:640px){
+    form{grid-template-columns:1fr;}
+    .summary-grid{grid-template-columns:1fr;}
+    .tx-row{grid-template-columns:auto 1fr auto;}
+    .tx-cat{display:none;}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a href="index.html" class="back-link mono">← back to portfolio</a>
+  <header>
+    <span class="eyebrow">// project playground</span>
+    <h1>Expense Tracker</h1>
+    <p>Log what you spend, see where it's going. Nothing saves after you close the tab yet — it's a build-in-progress.</p>
+  </header>
+
+  <div class="summary-grid">
+    <div class="summary-card">
+      <span class="summary-label">TOTAL SPENT</span>
+      <span class="summary-value coral" id="totalSpent">UGX 0</span>
+    </div>
+    <div class="summary-card">
+      <span class="summary-label">TRANSACTIONS</span>
+      <span class="summary-value mint" id="totalCount">0</span>
+    </div>
+    <div class="summary-card">
+      <span class="summary-label">TOP CATEGORY</span>
+      <span class="summary-value gold" id="topCategory">—</span>
+    </div>
+  </div>
+
+  <div class="panel">
+    <h2>Add an expense</h2>
+    <form id="expenseForm">
+      <div class="field">
+        <label for="desc">Description</label>
+        <input type="text" id="desc" placeholder="e.g. Rolex on the way home" required>
+      </div>
+      <div class="field">
+        <label for="amount">Amount (UGX)</label>
+        <input type="number" id="amount" placeholder="5000" min="1" step="1" required>
+      </div>
+      <div class="field">
+        <label for="category">Category</label>
+        <select id="category">
+          <option>Food</option>
+          <option>Transport</option>
+          <option>Airtime & Data</option>
+          <option>School</option>
+          <option>Rent</option>
+          <option>Entertainment</option>
+          <option>Other</option>
+        </select>
+      </div>
+      <button type="submit">Add expense</button>
+    </form>
+    <p class="error" id="formError">Enter a description and an amount greater than zero.</p>
+  </div>
+
+  <div class="panel">
+    <h2>By category</h2>
+    <div id="breakdown"></div>
+  </div>
+
+  <div class="panel">
+    <h2>Recent transactions</h2>
+    <ul class="tx-list" id="txList"></ul>
+  </div>
+</div>
+
+<script>
+  const CATEGORY_COLORS = {
+    'Food': '#FF5D73',
+    'Transport': '#FFC857',
+    'Airtime & Data': '#5EEAD4',
+    'School': '#7F9CF5',
+    'Rent': '#F0997B',
+    'Entertainment': '#ED93B1',
+    'Other': '#B3ACDB'
+  };
+
+  let expenses = [
+    { id: 1, desc: 'Boda to campus', amount: 6000, category: 'Transport' },
+    { id: 2, desc: 'Rolex', amount: 3500, category: 'Food' },
+    { id: 3, desc: 'MTN data bundle', amount: 15000, category: 'Airtime & Data' }
+  ];
+  let nextId = 4;
+
+  const form = document.getElementById('expenseForm');
+  const errorEl = document.getElementById('formError');
+
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const desc = document.getElementById('desc').value.trim();
+    const amount = parseFloat(document.getElementById('amount').value);
+    const category = document.getElementById('category').value;
+
+    if (!desc || !amount || amount <= 0) {
+      errorEl.style.display = 'block';
+      return;
+    }
+    errorEl.style.display = 'none';
+
+    expenses.unshift({ id: nextId++, desc, amount, category });
+    form.reset();
+    render();
+  });
+
+  function formatUGX(n) {
+    return 'UGX ' + Math.round(n).toLocaleString('en-UG');
+  }
+
+  function deleteExpense(id) {
+    expenses = expenses.filter(x => x.id !== id);
+    render();
+  }
+
+  function render() {
+    const total = expenses.reduce((sum, x) => sum + x.amount, 0);
+    document.getElementById('totalSpent').textContent = formatUGX(total);
+    document.getElementById('totalCount').textContent = expenses.length;
+
+    const byCategory = {};
+    expenses.forEach(x => { byCategory[x.category] = (byCategory[x.category] || 0) + x.amount; });
+    const sortedCats = Object.entries(byCategory).sort((a, b) => b[1] - a[1]);
+    document.getElementById('topCategory').textContent = sortedCats.length ? sortedCats[0][0] : '—';
+
+    const breakdownEl = document.getElementById('breakdown');
+    if (!sortedCats.length) {
+      breakdownEl.innerHTML = '<p class="empty-state">No expenses yet — add one above to see the breakdown.</p>';
+    } else {
+      breakdownEl.innerHTML = sortedCats.map(([cat, amt]) => {
+        const pct = total ? Math.round((amt / total) * 100) : 0;
+        const color = CATEGORY_COLORS[cat] || '#B3ACDB';
+        return `<div class="breakdown-row">
+          <span class="breakdown-label">${cat}</span>
+          <div class="breakdown-track"><div class="breakdown-fill" style="width:${pct}%;background:${color};"></div></div>
+          <span class="breakdown-pct">${pct}%</span>
+        </div>`;
+      }).join('');
+    }
+
+    const txList = document.getElementById('txList');
+    if (!expenses.length) {
+      txList.innerHTML = '<li class="empty-state">No transactions yet.</li>';
+    } else {
+      txList.innerHTML = expenses.map(x => {
+        const color = CATEGORY_COLORS[x.category] || '#B3ACDB';
+        return `<li class="tx-row">
+          <span class="tx-dot" style="background:${color};"></span>
+          <span>
+            <div class="tx-desc">${x.desc}</div>
+            <div class="tx-cat">${x.category}</div>
+          </span>
+          <span class="tx-amount">${formatUGX(x.amount)}</span>
+          <button class="tx-del" onclick="deleteExpense(${x.id})" aria-label="Delete">×</button>
+        </li>`;
+      }).join('');
+    }
+  }
+
+  render();
+</script>
+</body>
+</html>
