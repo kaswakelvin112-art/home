@@ -1,45 +1,62 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="exchange.css">
-    <title>Exchange rate - Kaswa Kelvin</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Currency converter using daily European Central Bank reference rates. No account or API key needed.">
+<title>Exchange Rate — Kaswa Kelvin</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="exchange.css">
 </head>
 <body>
-    <main>
-        <h1>Exchange rate</h1>
-        <div>
-            <p>This is a simple app that fetches the exchange rate of a currency from the European Central Bank (ECB) API.</p>
+<div class="wrap">
+  <a href="../index.html" class="back-link mono">← back to portfolio</a>
+  <header>
+    <span class="eyebrow">// project playground</span>
+    <h1>Exchange Rate</h1>
+    <p>Convert between 30+ currencies using daily reference rates published by the European Central Bank.</p>
+  </header>
 
+  <div class="panel converter">
+    <h2>Convert</h2>
+    <div class="converter-grid">
+      <div class="field">
+        <label for="amount">Amount</label>
+        <input type="number" id="amount" placeholder="100" min="0" step="any" inputmode="decimal" autocomplete="off">
+      </div>
+      <div class="pair">
+        <div class="field">
+          <label for="fromCurrency">From</label>
+          <select id="fromCurrency"></select>
         </div>
-        <div>
-            <div>
-                <select id="currency-select">
-                    <option value="USD">USD</option>
-                    <option value="EUR">EUR</option>
-                    <option value="GBP">GBP</option>
-                    <option value="JPY">JPY</option>
-                </select>
-                <span> to \u2192</span>
-                <select id="currency-select">
-                    <option value="USD">USD</option>
-                    <option value="EUR">EUR</option>
-                    <option value="GBP">GBP</option>
-                    <option value="JPY">JPY</option>
-                </select>
-            </div>
-            <div>
-                <input type="number" id="currency" placeholder="Enter amount">
-                <button id="convert-btn">Convert</button>
-            </div>
-
-            <div>
-                <p id="result"></p>
-            </div>
+        <button id="swapBtn" class="swap-btn mono" type="button" title="Swap currencies" aria-label="Swap currencies">⇄</button>
+        <div class="field">
+          <label for="toCurrency">To</label>
+          <select id="toCurrency"></select>
         </div>
-    </main>
+      </div>
+      <button id="convertBtn" type="button">Convert</button>
+    </div>
+    <p class="error" id="error"></p>
+  </div>
 
-    <script src="exchange.js"></script>
+  <div class="panel result" id="resultPanel" hidden>
+    <span class="result-label mono" id="resultLabel"></span>
+    <span class="result-value" id="resultValue"></span>
+    <span class="result-meta mono" id="resultMeta"></span>
+  </div>
+
+  <div class="panel">
+    <h2 id="ratesTitle">Rates</h2>
+    <p class="subtitle mono" id="ratesDate"></p>
+    <div class="rates-grid" id="ratesGrid"></div>
+  </div>
+
+  <p class="note">Rates come live from the Frankfurter API and follow the European Central Bank's daily reference rates — published once per business day, free, no account or key needed.</p>
+</div>
+
+<script src="exchange.js"></script>
 </body>
 </html>
