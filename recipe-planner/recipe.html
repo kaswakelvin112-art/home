@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Recipe &amp; Meal Planner — Kaswa Kelvin</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="recipe.css">
+</head>
+<body>
+<div class="wrap">
+  <a href="../index.html" class="back-link mono">← back to portfolio</a>
+
+  <header>
+    <span class="eyebrow">// project playground</span>
+    <h1>Recipe &amp; Meal Planner</h1>
+    <p>Search real recipes, check the ingredients and steps, then drop them onto a day of the week.</p>
+  </header>
+
+  <p class="note">Recipe data comes live from TheMealDB's free public API. Your weekly plan lives in memory for this session only — refresh and it clears, same as the other demo projects here.</p>
+
+  <div class="search-row">
+    <input type="text" id="searchInput" placeholder="Search a recipe, e.g. chicken curry">
+    <button id="searchBtn">Search</button>
+    <button id="surpriseBtn" class="ghost">🎲 Surprise me</button>
+  </div>
+  <div class="chip-row" id="categoryChips"></div>
+
+  <div class="layout">
+    <div>
+      <div class="results-grid" id="resultsGrid">
+        <p class="loading">Loading recipes…</p>
+      </div>
+    </div>
+
+    <div class="panel">
+      <h2>This week's plan</h2>
+      <div id="weekPlan"></div>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal" id="modalContent"></div>
+</div>
+
+
+</body>
+</html>
