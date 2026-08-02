@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="exchange.css">
+    <title>Exchange rate - Kaswa Kelvin</title>
+</head>
+<body>
+    <main>
+        <h1>Exchange rate</h1>
+        <div>
+            <p>This is a simple app that fetches the exchange rate of a currency from the European Central Bank (ECB) API.</p>
+
+        </div>
+        <div>
+            <div>
+                <select id="currency-select">
+                    <option value="USD">USD</option>
+                    <option value="EUR">EUR</option>
+                    <option value="GBP">GBP</option>
+                    <option value="JPY">JPY</option>
+                </select>
+                <span> to \u2192</span>
+                <select id="currency-select">
+                    <option value="USD">USD</option>
+                    <option value="EUR">EUR</option>
+                    <option value="GBP">GBP</option>
+                    <option value="JPY">JPY</option>
+                </select>
+            </div>
+            <div>
+                <input type="number" id="currency" placeholder="Enter amount">
+                <button id="convert-btn">Convert</button>
+            </div>
+
+            <div>
+                <p id="result"></p>
+            </div>
+        </div>
+    </main>
+
+    <script src="exchange.js"></script>
+</body>
+</html>
