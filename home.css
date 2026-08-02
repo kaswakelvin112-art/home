@@ -162,6 +162,7 @@
   .pill-idea{background:var(--coral-dim);color:var(--coral);}
   .project-stack{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text-dim);}
   .project-link{font-size:13px;font-weight:600;color:var(--gold);display:inline-flex;align-items:center;gap:5px;}
+  .project-link-placeholder{color:var(--text-dim);cursor:default;}
 
   /* contact */
   .contact-card{
