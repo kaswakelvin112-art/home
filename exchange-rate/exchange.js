@@ -1,16 +1,29 @@
-const API = 'https://api.frankfurter.app';
+const API = 'https://open.er-api.com/v6/latest';
 const RATE_CACHE = new Map();
 
 const CURRENCIES = {
+  'AOA': 'Angolan Kwanza',
   'AUD': 'Australian Dollar',
+  'BIF': 'Burundian Franc',
   'BRL': 'Brazilian Real',
+  'BWP': 'Botswana Pula',
   'CAD': 'Canadian Dollar',
+  'CDF': 'Congolese Franc',
   'CHF': 'Swiss Franc',
   'CNY': 'Chinese Renminbi',
+  'CVE': 'Cape Verdean Escudo',
   'CZK': 'Czech Koruna',
+  'DJF': 'Djiboutian Franc',
   'DKK': 'Danish Krone',
+  'DZD': 'Algerian Dinar',
+  'EGP': 'Egyptian Pound',
+  'ERN': 'Eritrean Nakfa',
+  'ETB': 'Ethiopian Birr',
   'EUR': 'Euro',
   'GBP': 'British Pound',
+  'GHS': 'Ghanaian Cedi',
+  'GMD': 'Gambian Dalasi',
+  'GNF': 'Guinean Franc',
   'HKD': 'Hong Kong Dollar',
   'HUF': 'Hungarian Forint',
   'IDR': 'Indonesian Rupiah',
@@ -18,23 +31,50 @@ const CURRENCIES = {
   'INR': 'Indian Rupee',
   'ISK': 'Icelandic Krona',
   'JPY': 'Japanese Yen',
+  'KES': 'Kenyan Shilling',
   'KRW': 'South Korean Won',
+  'LRD': 'Liberian Dollar',
+  'LSL': 'Lesotho Loti',
+  'LYD': 'Libyan Dinar',
+  'MAD': 'Moroccan Dirham',
+  'MGA': 'Malagasy Ariary',
+  'MRU': 'Mauritanian Ouguiya',
+  'MUR': 'Mauritian Rupee',
+  'MWK': 'Malawian Kwacha',
   'MXN': 'Mexican Peso',
   'MYR': 'Malaysian Ringgit',
+  'MZN': 'Mozambican Metical',
+  'NAD': 'Namibian Dollar',
+  'NGN': 'Nigerian Naira',
   'NOK': 'Norwegian Krone',
   'NZD': 'New Zealand Dollar',
   'PHP': 'Philippine Peso',
   'PLN': 'Polish Zloty',
   'RON': 'Romanian Leu',
+  'RWF': 'Rwandan Franc',
+  'SCR': 'Seychellois Rupee',
+  'SDG': 'Sudanese Pound',
   'SEK': 'Swedish Krona',
   'SGD': 'Singapore Dollar',
+  'SLL': 'Sierra Leonean Leone',
+  'SOS': 'Somali Shilling',
+  'SSP': 'South Sudanese Pound',
+  'STN': 'Sao Tomean Dobra',
+  'SZL': 'Swazi Lilangeni',
   'THB': 'Thai Baht',
+  'TND': 'Tunisian Dinar',
   'TRY': 'Turkish Lira',
+  'TZS': 'Tanzanian Shilling',
+  'UGX': 'Ugandan Shilling',
   'USD': 'US Dollar',
-  'ZAR': 'South African Rand'
+  'XAF': 'Central African CFA Franc',
+  'XOF': 'West African CFA Franc',
+  'ZAR': 'South African Rand',
+  'ZMW': 'Zambian Kwacha',
+  'ZWL': 'Zimbabwean Dollar'
 };
 
-const POPULAR = ['EUR', 'GBP', 'JPY', 'CHF', 'CAD', 'AUD', 'CNY', 'INR', 'SGD', 'KRW', 'MXN', 'ZAR'];
+const POPULAR = ['EUR', 'GBP', 'JPY', 'CNY', 'USD', 'ZAR', 'UGX', 'KES', 'TZS', 'NGN', 'GHS', 'EGP'];
 
 const amountInput = document.getElementById('amount');
 const fromSelect = document.getElementById('fromCurrency');
@@ -51,12 +91,12 @@ const ratesTitle = document.getElementById('ratesTitle');
 const ratesDate = document.getElementById('ratesDate');
 
 function populateSelects() {
-  Object.entries(CURRENCIES).forEach(([code, name]) => {
-    fromSelect.add(new Option(code + ' · ' + name, code));
-    toSelect.add(new Option(code + ' · ' + name, code));
+  Object.keys(CURRENCIES).sort().forEach(code => {
+    fromSelect.add(new Option(code + ' · ' + CURRENCIES[code], code));
+    toSelect.add(new Option(code + ' · ' + CURRENCIES[code], code));
   });
   fromSelect.value = 'USD';
-  toSelect.value = 'EUR';
+  toSelect.value = 'UGX';
 }
 
 function formatAmount(n) {
@@ -66,15 +106,21 @@ function formatAmount(n) {
 
 function formatRate(r) {
   if (r == null || !isFinite(r)) return '—';
-  return r.toLocaleString('en-US', { maximumFractionDigits: r < 1 ? 6 : 4 });
+  return r.toLocaleString('en-US', { maximumFractionDigits: r < 1 ? 6 : 2 });
+}
+
+function formatDate(s) {
+  if (!s) return '';
+  const parts = String(s).split(' ');
+  return parts.slice(0, 4).join(' ');
 }
 
 async function fetchRates(base) {
   if (RATE_CACHE.has(base)) return RATE_CACHE.get(base);
-  const res = await fetch(API + '/latest?from=' + encodeURIComponent(base));
+  const res = await fetch(API + '/' + encodeURIComponent(base));
   if (!res.ok) throw new Error('HTTP ' + res.status);
   const data = await res.json();
-  if (!data.rates) throw new Error('No rate data returned');
+  if (data.result !== 'success' || !data.rates) throw new Error('No rate data returned');
   RATE_CACHE.set(base, data);
   return data;
 }
@@ -82,21 +128,20 @@ async function fetchRates(base) {
 function renderResult(amount, from, to, rate, date) {
   resultLabel.textContent = formatAmount(amount) + ' ' + from + ' =';
   resultValue.innerHTML = formatAmount(amount * rate) + ' <span>' + to + '</span>';
-  resultMeta.textContent = '1 ' + from + ' = ' + formatRate(rate) + ' ' + to + ' · updated ' + date;
+  resultMeta.textContent = '1 ' + from + ' = ' + formatRate(rate) + ' ' + to + ' · updated ' + formatDate(date);
   resultPanel.hidden = false;
 }
 
 function renderRates(data, base) {
   ratesTitle.textContent = 'Rates vs ' + base;
-  ratesDate.textContent = 'Reference rates · ' + data.date;
+  ratesDate.textContent = 'Reference rates · updated ' + formatDate(data.time_last_update_utc);
   ratesGrid.innerHTML = POPULAR
-    .filter(code => code !== base)
+    .filter(code => code !== base && data.rates[code] != null)
     .map(code => {
-      const value = data.rates[code];
       return '<div class="rate-card">' +
         '<div class="rate-code">' + code + '</div>' +
         '<div class="rate-name">' + (CURRENCIES[code] || code) + '</div>' +
-        '<div class="rate-value">' + formatRate(value) + '</div>' +
+        '<div class="rate-value">' + formatRate(data.rates[code]) + '</div>' +
       '</div>';
     })
     .join('');
@@ -127,11 +172,11 @@ async function convert(showEmptyError) {
   try {
     const data = await fetchRates(from);
     if (from === to) {
-      renderResult(amount, from, to, 1, data.date);
+      renderResult(amount, from, to, 1, data.time_last_update_utc);
     } else if (data.rates[to] == null) {
       showError('No rate available for ' + to + '.');
     } else {
-      renderResult(amount, from, to, data.rates[to], data.date);
+      renderResult(amount, from, to, data.rates[to], data.time_last_update_utc);
     }
     renderRates(data, from);
   } catch (err) {
