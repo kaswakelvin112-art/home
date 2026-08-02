@@ -9,17 +9,62 @@
     'Other': '#B3ACDB'
   };
 
-  let expenses = [
+  const SEED = [
     { id: 1, desc: 'Boda to campus', amount: 6000, category: 'Transport' },
     { id: 2, desc: 'Rolex', amount: 3500, category: 'Food' },
     { id: 3, desc: 'MTN data bundle', amount: 15000, category: 'Airtime & Data' }
   ];
-  let nextId = 4;
+
+  let expenses = [];
+  let nextId = 1;
+  let db = null;
 
   const form = document.getElementById('expenseForm');
   const errorEl = document.getElementById('formError');
 
-  form.addEventListener('submit', (e) => {
+  function openDB() {
+    return new Promise((resolve, reject) => {
+      const req = indexedDB.open('expense-tracker', 1);
+      req.onupgradeneeded = () => {
+        if (!req.result.objectStoreNames.contains('expenses')) {
+          req.result.createObjectStore('expenses', { keyPath: 'id', autoIncrement: true });
+        }
+      };
+      req.onsuccess = () => resolve(req.result);
+      req.onerror = () => reject(req.error);
+    });
+  }
+
+  function dbAll() {
+    return new Promise((resolve, reject) => {
+      const tx = db.transaction('expenses', 'readonly');
+      const req = tx.objectStore('expenses').getAll();
+      req.onsuccess = () => resolve(req.result);
+      req.onerror = () => reject(req.error);
+    });
+  }
+
+  function dbAdd(expense) {
+    if (!db) return Promise.resolve();
+    return new Promise((resolve, reject) => {
+      const tx = db.transaction('expenses', 'readwrite');
+      tx.objectStore('expenses').put(expense);
+      tx.oncomplete = () => resolve();
+      tx.onerror = () => reject(tx.error);
+    });
+  }
+
+  function dbDelete(id) {
+    if (!db) return Promise.resolve();
+    return new Promise((resolve, reject) => {
+      const tx = db.transaction('expenses', 'readwrite');
+      tx.objectStore('expenses').delete(id);
+      tx.oncomplete = () => resolve();
+      tx.onerror = () => reject(tx.error);
+    });
+  }
+
+  form.addEventListener('submit', async (e) => {
     e.preventDefault();
     const desc = document.getElementById('desc').value.trim();
     const amount = parseFloat(document.getElementById('amount').value);
@@ -31,7 +76,9 @@
     }
     errorEl.style.display = 'none';
 
-    expenses.unshift({ id: nextId++, desc, amount, category });
+    const expense = { id: nextId++, desc, amount, category };
+    expenses.unshift(expense);
+    await dbAdd(expense);
     form.reset();
     render();
   });
@@ -40,8 +87,9 @@
     return 'UGX ' + Math.round(n).toLocaleString('en-UG');
   }
 
-  function deleteExpense(id) {
+  async function deleteExpense(id) {
     expenses = expenses.filter(x => x.id !== id);
+    await dbDelete(id);
     render();
   }
 
@@ -88,4 +136,25 @@
       }).join('');
     }
   }
-  render();
+
+  async function init() {
+    try {
+      db = await openDB();
+      const rows = await dbAll();
+      if (rows.length) {
+        expenses = rows.sort((a, b) => b.id - a.id);
+        nextId = Math.max(...rows.map(x => x.id)) + 1;
+      } else {
+        expenses = [...SEED];
+        nextId = SEED.length + 1;
+        await Promise.all(SEED.map(x => dbAdd(x)));
+      }
+    } catch (err) {
+      db = null;
+      expenses = [...SEED];
+      nextId = SEED.length + 1;
+    }
+    render();
+  }
+
+  init();
