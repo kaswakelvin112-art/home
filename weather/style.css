@@ -40,6 +40,7 @@ body{
 .search input{
     border: 0;
     outline: 0;
+    width: 100%;
     background: #bffffc;
     color:#555;
     padding: 10px 25px;
